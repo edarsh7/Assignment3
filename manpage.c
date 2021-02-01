@@ -13,17 +13,21 @@
 #include <pthread.h>
 
 int turn = 0;
-pthread_mutex_t lock;
+pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t cond = PTHREAD_COND_INTIALIZER
 
 void *thread_organizer(void *empty)
 {
-  int pid = getParagraphId(); 
-  while(turn != pid)
-  {
+  pthread_mutex_lock(&lock);
+  while(pid != turn)
+  { 
+    pthread_cond_wait(&cond, &lock);
   }
   
   showParagraph();
   turn++;
+
+  pthread_mutex_unlock(&lock);
 }
 
 /*
