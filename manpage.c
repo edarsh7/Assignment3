@@ -34,6 +34,7 @@ void *thread_organizer(void *empty)
 
   pthread_mutex_unlock(&lock);
 
+  return NULL;
 }
 
 /*
