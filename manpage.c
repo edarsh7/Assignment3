@@ -14,8 +14,8 @@
 
 int turn = 0;
 pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
-pthread_cond_t cond = PTHREAD_COND_INTIALIZER;
 
+pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 void *thread_organizer(void *empty)
 {
   int pid = getParagraphId();
