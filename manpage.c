@@ -18,6 +18,7 @@ pthread_cond_t cond = PTHREAD_COND_INTIALIZER;
 
 void *thread_organizer(void *empty)
 {
+  int pid = getParagraphId();
   pthread_mutex_lock(&lock);
   while(pid != turn)
   { 
