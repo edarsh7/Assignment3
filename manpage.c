@@ -26,7 +26,7 @@ void *thread_organizer(void *empty)
 
   while(turn != pid)
   {
-    pthread_cond_wait(&cond, &lock)
+    pthread_cond_wait(&cond, &lock);
   }
 
   showParagraph();
