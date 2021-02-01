@@ -18,6 +18,8 @@
 void manpage() 
 {
   int pid = getParagraphId(); // pid = 'Paragraph Id"
-  printf("para id: %d", pid);
+  int pid2 = getParagraphId();
+  printf("para id: %d, %d \n", pid, pid2);
+  showParagraph();
   showParagraph();
 }
