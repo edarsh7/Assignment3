@@ -12,15 +12,15 @@
 #include <stdio.h>
 #include <pthread.h>
 
-int turn = 0;
 pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
-
 pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+
+int turn = 0;
+
 void *thread_organizer(void *empty)
 {
+
   int pid = getParagraphId();
-
-
 
   pthread_mutex_lock(&lock);
 
@@ -30,7 +30,6 @@ void *thread_organizer(void *empty)
   }
 
   showParagraph();
-  turn++;
   pthread_cond_broadcast(&cond);
 
   pthread_mutex_unlock(&lock);
