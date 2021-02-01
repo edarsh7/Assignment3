@@ -21,13 +21,9 @@ void *thread_organizer(void *empty)
   int pid = getParagraphId();
 
   pthread_mutex_lock(&lock);
-  while(pid != turn)
-  { 
-    pthread_cond_wait(&cond, &lock);
-  }
-  
+
   showParagraph();
-  turn++;
+
 
   pthread_mutex_unlock(&lock);
 }
