@@ -43,7 +43,7 @@ void manpage()
 
   for(int j = 0; j < 7; j++)
   {
-    pthread_join(thread[i], NULL);
+    pthread_join(threads[j], NULL);
   }
 
   pthread_mutex_destroy(&lock);
