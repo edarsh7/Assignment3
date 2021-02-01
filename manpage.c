@@ -19,7 +19,12 @@ void manpage()
 {
   int pid = getParagraphId(); // pid = 'Paragraph Id"
   int pid2 = getParagraphId();
-  printf("para id: %d, %d \n", pid, pid2);
+  int pid3 = getParagraphId(); // pid = 'Paragraph Id"
+  int pid4 = getParagraphId();
+  int pid5 = getParagraphId(); // pid = 'Paragraph Id"
+  int pid6 = getParagraphId();
+  int pid7 = getParagraphId(); // pid = 'Paragraph Id"
+  printf("para id: %d, %d, %d, %d, %d, %d, %d \n", pid, pid2, pid3, pid4, pid5, pid6, pid7);
   showParagraph();
-  showParagraph();
+
 }
