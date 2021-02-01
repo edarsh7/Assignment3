@@ -21,9 +21,9 @@ void *thread_organizer(void *empty)
   while(turn != pid)
   {
   }
-  turn++;
-  showParagraph();
   
+  showParagraph();
+  turn++;
 }
 
 /*
