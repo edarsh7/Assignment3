@@ -31,7 +31,7 @@ void *thread_organizer(void *empty)
 
   showParagraph();
   turn++;
-  pthread_cond_broadcast(&cond);
+  
 
   pthread_mutex_unlock(&lock);
 
