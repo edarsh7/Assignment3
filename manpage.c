@@ -9,6 +9,22 @@
  ***********************************************************************/
 
 #include "manpage.h"
+#include <stdio.h>
+#include <pthread.h>
+
+int turn = 0;
+pthread_mutex_t lock;
+
+void *thread_organizer(void *empty)
+{
+  int pid = getParagraphId(); 
+  while(turn != pid)
+  {
+  }
+
+  showParagraph();
+  
+}
 
 /*
  * See manpage.h for details.
@@ -17,14 +33,18 @@
  */
 void manpage() 
 {
-  int pid = getParagraphId(); // pid = 'Paragraph Id"
-  int pid2 = getParagraphId();
-  int pid3 = getParagraphId(); // pid = 'Paragraph Id"
-  int pid4 = getParagraphId();
-  int pid5 = getParagraphId(); // pid = 'Paragraph Id"
-  int pid6 = getParagraphId();
-  int pid7 = getParagraphId(); // pid = 'Paragraph Id"
-  printf("para id: %d, %d, %d, %d, %d, %d, %d, %d \n", pid, pid2, pid3, pid4, pid5, pid6, pid7);
-  showParagraph();
+  pthread_mutex_init(&lock, NULL);
 
+  pthread_t threads[7];
+  for(int i = 0; i < 7; i++)
+  {
+    pthread_create(&threads[i], NULL, thread_organizer, NULL);
+  }
+
+  for(int j = 0; j < 7; j++)
+  {
+    pthread_join(thread[i], NULL);
+  }
+
+  pthread_mutex_destroy(&lock);
 }

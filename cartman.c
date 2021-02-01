@@ -1,4 +1,4 @@
-hi
+
 #include "cartman.h"
 
 /*
