@@ -22,6 +22,7 @@ void *thread_organizer(void *empty)
 
   int pid = getParagraphId();
 
+  pthread_mutex_lock(&lock);
 
   while(turn != pid)
   {
@@ -31,8 +32,10 @@ void *thread_organizer(void *empty)
   showParagraph();
   
   turn++;
-
+  
   pthread_cond_broadcast(&cond);
+
+  pthread_mutex_unlock(&lock);
 
   return NULL;
 }
