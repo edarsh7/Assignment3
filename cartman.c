@@ -6,6 +6,14 @@
 
 sem_t junction[5];
 
+
+void *arrive_manager(void *arg)
+{
+  int junct = *(int *)arg;
+  sem_wait(&junction[junct]);
+  sem_wait(&junction[junct+1]);
+}
+
 /*
  * You need to implement this function, see cartman.h for details 
  */
@@ -34,11 +42,4 @@ void cartman()
   {
     sem_init(&junction[i], 0, 1);
   }
-}
-
-void *arrive_manager(void *arg)
-{
-  int junct = *(int *)arg;
-  sem_wait(&junction[junct]);
-  sem_wait(&junction[junct+1]);
 }
