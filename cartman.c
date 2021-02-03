@@ -5,7 +5,6 @@
 #include <stdio.h>
 
 sem_t junction[5];
-pthread_t thread[5];
 
 typedef struct cart_info
 {
@@ -22,16 +21,14 @@ void *arrive_manager(void *arg)
   if(CART->track == Black)
   {
     sem_wait(&junction[4]);
-    reserve(CART->cart, E);
     sem_wait(&junction[0]);
-    
+    reserve(CART->cart, E);
     reserve(CART->cart, A);
   }else
   {
     sem_wait(&junction[CART->track]);
-    reserve(CART->cart, CART->track);
     sem_wait(&junction[CART->track + 1]);
-    
+    reserve(CART->cart, CART->track);
     reserve(CART->cart, CART->track + 1);
   }
   
