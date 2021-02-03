@@ -15,7 +15,7 @@ typedef struct cart_info
 
 void *arrive_manager(void *arg)
 {
-  cart_info CART = *(cart_info *)arg;
+  cart_info *CART = (cart_info *)arg;
 
 
 }
@@ -32,8 +32,7 @@ void arrive(unsigned int cart, enum track track, enum junction junction)
 
   pthread_t thread;
   
-  pthread_create(&thread, NULL, arrive_manager, (void *) CART);
-  pthread_join(&thread, NULL);
+  pthread_create(&thread, NULL, arrive_manager, (void *) &CART);
 }
 
 /*
