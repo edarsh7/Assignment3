@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 sem_t junction[5];
+sem_t deadlock;
 
 typedef struct cart_info
 {
@@ -20,14 +21,15 @@ void *arrive_manager(void *arg)
 
   switch(CART->track){
     case Black:
+      sem_wait(&deadlock);
       sem_wait(&junction[0]);
-      reserve(CART->cart, A);
       sem_wait(&junction[4]);
-      
+      reserve(CART->cart, A);
       reserve(CART->cart, E);
       break;
 
     case Red:
+      sem_wait(&deadlock);
       sem_wait(&junction[1]);
       sem_wait(&junction[0]);
       reserve(CART->cart, A);
@@ -35,6 +37,7 @@ void *arrive_manager(void *arg)
       break;
 
     case Green:
+      sem_wait(&deadlock);
       sem_wait(&junction[2]);
       sem_wait(&junction[1]);
       reserve(CART->cart, B);
@@ -42,6 +45,7 @@ void *arrive_manager(void *arg)
       break;
 
     case Blue:
+      sem_wait(&deadlock);
       sem_wait(&junction[2]);
       sem_wait(&junction[3]);
       reserve(CART->cart, C);
@@ -49,6 +53,7 @@ void *arrive_manager(void *arg)
       break;
 
     case Yellow:
+      sem_wait(&deadlock);
       sem_wait(&junction[4]);
       sem_wait(&junction[3]);
       reserve(CART->cart, D);
@@ -86,6 +91,7 @@ void depart(unsigned int cart, enum track track, enum junction junct)
       release(cart, E);
       sem_post(&junction[4]);
       sem_post(&junction[0]);
+      sem_post(&deadlock);
       break;
 
     case Red:
@@ -124,6 +130,7 @@ void depart(unsigned int cart, enum track track, enum junction junct)
  */
 void cartman() 
 {
+  sem_init(&deadlock, 0, 1);
   for(int i=0; i < 5; i++)
   {
     sem_init(&junction[i], 0, 1);
