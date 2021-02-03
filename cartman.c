@@ -22,7 +22,10 @@ void *arrive_manager(void *arg)
   enum junction j1 = CART->track;
   enum junction j2 = CART->track + 1;
 
-  
+  if(turn == 0)
+  {
+    sem_wait(&deadlock);
+  }
   sem_wait(&junction[(int)CART->track]);
   if(CART->track == Black)
   {
@@ -78,7 +81,11 @@ void depart(unsigned int cart, enum track track, enum junction junct)
     sem_post(&junction[(int)track]);
     sem_post(&junction[(int)(track + 1)]);
   }
-  
+  if(turn == 0)
+  {
+    turn++;
+    sem_post(&deadlock);
+  }
 }
 
 
