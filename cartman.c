@@ -19,23 +19,21 @@ void *arrive_manager(void *arg)
 {
 
   cart_info *CART = (cart_info *)arg;
+  enum junction j1 = CART->track;
+  enum junction j2 = CART->track + 1;
 
+  
+  sem_wait(&junction[(int)CART->track]);
   if(CART->track == Black)
   {
-    sem_wait(&junction[4]);
     sem_wait(&junction[0]);
     reserve(CART->cart, A);
-    reserve(CART->cart, E);
-  }
-  else
+  }else
   {
-    enum junction j1 = CART->track;
-    enum junction j2 = CART->track + 1;
-    sem_wait(&junction[(int)CART->track]);
     sem_wait(&junction[(int)CART->track + 1]);
-    reserve(CART->cart, j1);
     reserve(CART->cart, j2);
   }
+  reserve(CART->cart, j1);
 
   
   
