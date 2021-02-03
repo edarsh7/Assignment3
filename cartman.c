@@ -6,6 +6,7 @@
 
 sem_t junction[5];
 sem_t deadlock;
+int turn = 0;
 
 typedef struct cart_info
 {
@@ -18,50 +19,17 @@ void *arrive_manager(void *arg)
 {
 
   cart_info *CART = (cart_info *)arg;
+  enum junction j1 = CART->track;
+  enum junction j2 = CART->track + 1;
 
-  switch(CART->track){
-    case Black:
-      sem_wait(&deadlock);
-      sem_wait(&junction[0]);
-      sem_wait(&junction[4]);
-      reserve(CART->cart, A);
-      reserve(CART->cart, E);
-      break;
-
-    case Red:
-      sem_wait(&junction[1]);
-      reserve(CART->cart, B);
-      sem_wait(&deadlock);
-      sem_wait(&junction[0]);
-      reserve(CART->cart, A);
   
-      break;
+  sem_wait(&junction[(int)CART->track]);
+  sem_wait(&junction[(int)CART->track + 1]);
+  reserve(CART->cart, j1);
+  reserve(CART->cart, j2)
 
-    case Green:
-      sem_wait(&junction[2]);
-      reserve(CART->cart, C);
-      sem_wait(&deadlock);
-      sem_wait(&junction[1]);
-      reserve(CART->cart, B);
-    
-      break;
-
-    case Blue:
-      sem_wait(&junction[3]);
-      reserve(CART->cart, D);
-      sem_wait(&deadlock);
-      sem_wait(&junction[2]);
-      reserve(CART->cart, C);
-      break;
-
-    case Yellow:
-      sem_wait(&deadlock);
-      sem_wait(&junction[3]);
-      reserve(CART->cart, D);
-      sem_wait(&junction[4]);
-      reserve(CART->cart, E);
-      break;
-  }
+  
+  
   cross(CART->cart, CART->track, CART->junction);
   return NULL;
 }
@@ -93,7 +61,6 @@ void depart(unsigned int cart, enum track track, enum junction junct)
       release(cart, E);
       sem_post(&junction[4]);
       sem_post(&junction[0]);
-      sem_post(&deadlock);
       break;
 
     case Red:
