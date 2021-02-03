@@ -5,8 +5,6 @@
 #include <stdio.h>
 
 sem_t junction[5];
-sem_t deadlock;
-pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 
 typedef struct cart_info
 {
@@ -22,7 +20,6 @@ void *arrive_manager(void *arg)
 {
   cart_info *CART = (cart_info *)arg;
  
-  pthread_mutex_lock(&lock);
   if(CART->track == Black)
   {
     sem_wait(&junction[4]);
@@ -87,7 +84,6 @@ void depart(unsigned int cart, enum track track, enum junction junct)
     sem_post(&junction[track]);
     sem_post(&junction[track + 1]);
   }
-  pthread_mutex_unlock(&lock);
 
 }
 
@@ -105,7 +101,5 @@ void cartman()
   {
     sem_init(&junction[i], 0, 1);
   }
-  sem_init(&deadlock, 0, 2);
-  pthread_mutex_init(&lock, NULL);
 
 }
