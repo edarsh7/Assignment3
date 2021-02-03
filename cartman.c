@@ -21,8 +21,9 @@ void *arrive_manager(void *arg)
   switch(CART->track){
     case Black:
       sem_wait(&junction[0]);
-      sem_wait(&junction[4]);
       reserve(CART->cart, A);
+      sem_wait(&junction[4]);
+      
       reserve(CART->cart, E);
       break;
 
