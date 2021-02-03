@@ -57,7 +57,7 @@ void arrive(unsigned int cart, enum track track, enum junction junction)
 
   pthread_create(&thread, NULL, arrive_manager, (void *) &CART);
 
-  pthread_join(thread, NULL);
+  //pthread_join(thread, NULL);
 
 }
 
@@ -73,17 +73,17 @@ void depart(unsigned int cart, enum track track, enum junction junct)
   
   if(track == Black)
   {
-    release(cart, E);
     release(cart, A);
-    sem_post(&junction[4]);
+    release(cart, E);
     sem_post(&junction[0]);
+    sem_post(&junction[4]);
   }
   else
   {
-    release(cart, track+1);
     release(cart, track);
-    sem_post(&junction[track + 1]);
+    release(cart, track+1);
     sem_post(&junction[track]);
+    sem_post(&junction[track + 1]);
   }
 
 }
