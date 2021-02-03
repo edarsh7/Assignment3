@@ -23,14 +23,14 @@ void *arrive_manager(void *arg)
   if(CART->track == Black)
   {
     sem_wait(&junction[4]);
+    reserve(CART->cart, E);
     sem_wait(&junction[0]);
     reserve(CART->cart, A);
-    reserve(CART->cart, E);
   }else
   {
     sem_wait(&junction[(int)CART->track]);
-    sem_wait(&junction[(int)CART->track + 1]);
     reserve(CART->cart, CART->track);
+    sem_wait(&junction[(int)CART->track + 1]);
     reserve(CART->cart, CART->track + 1);
   }
   
