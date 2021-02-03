@@ -74,10 +74,10 @@ void depart(unsigned int cart, enum track track, enum junction junct)
   else
   {
 
-    release(cart, track);
-    release(cart, track + 1);
-    sem_post(&junction[j1]);
-    sem_post(&junction[j2]);
+    release(cart, j1);
+    release(cart, j2);
+    sem_post(&junction[(int)track]);
+    sem_post(&junction[(int)(track + 1)]);
   }
   
 }
