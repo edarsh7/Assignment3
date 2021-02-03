@@ -6,7 +6,6 @@
 
 sem_t junction[5];
 sem_t deadlock;
-int turn = 0;
 
 typedef struct cart_info
 {
@@ -20,6 +19,7 @@ void *arrive_manager(void *arg)
 
   cart_info *CART = (cart_info *)arg;
 
+  sem_wait(&deadlock);
   sem_wait(&junction[(int)CART->track]);
   if(CART->track == Black)
   {
@@ -31,8 +31,6 @@ void *arrive_manager(void *arg)
     reserve(CART->cart, CART->track + 1);
   }
   reserve(CART->cart, CART->track);
-
-  
   
   cross(CART->cart, CART->track, CART->junction);
   return NULL;
@@ -74,7 +72,7 @@ void depart(unsigned int cart, enum track track, enum junction junct)
     sem_post(&junction[(int)track]);
     sem_post(&junction[(int)(track + 1)]);
   }
-  
+  sem_post(&deadlock);
 }
 
 
@@ -83,9 +81,10 @@ void depart(unsigned int cart, enum track track, enum junction junct)
  */
 void cartman() 
 {
-  sem_init(&deadlock, 0, 1);
+
   for(int i=0; i < 5; i++)
   {
     sem_init(&junction[i], 0, 1);
   }
+  sem_init(&deadlock, 0, 2);
 }
