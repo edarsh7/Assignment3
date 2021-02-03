@@ -50,10 +50,10 @@ void arrive(unsigned int cart, enum track track, enum junction junction)
 
   pthread_t thread;
   
-  sem_wait(&deadlock);
+
   pthread_create(&thread, NULL, arrive_manager, (void *) &CART);
   pthread_join(thread, NULL);
-  sem_post(&deadlock);
+
 }
 
 /*
