@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 sem_t junction[5];
+sem_t deadlock;
 
 typedef struct cart_info
 {
@@ -17,18 +18,20 @@ typedef struct cart_info
 void *arrive_manager(void *arg)
 {
   cart_info *CART = (cart_info *)arg;
- 
+
+  sem_wait(&deadlock);
   if(CART->track == Black)
   {
     sem_wait(&junction[4]);
-    sem_wait(&junction[0]);
     reserve(CART->cart, E);
+    sem_wait(&junction[0]);
     reserve(CART->cart, A);
   }else
   {
     sem_wait(&junction[CART->track]);
-    sem_wait(&junction[CART->track + 1]);
     reserve(CART->cart, CART->track);
+    sem_wait(&junction[CART->track + 1]);
+    
     reserve(CART->cart, CART->track + 1);
   }
   
@@ -76,12 +79,12 @@ void depart(unsigned int cart, enum track track, enum junction junct)
   }
   else
   {
-    release(cart, track);
     release(cart, track+1);
-    sem_post(&junction[track]);
     sem_post(&junction[track + 1]);
+    release(cart, track);
+    sem_post(&junction[track]);
   }
-
+  sem_post(&deadlock);
 }
 
 
@@ -93,7 +96,7 @@ void depart(unsigned int cart, enum track track, enum junction junct)
  */
 void cartman() 
 {
-
+  sem_init(&deadlock, 0 ,2);
   for(int i=0; i < 5; i++)
   {
     sem_init(&junction[i], 0, 1);
