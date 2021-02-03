@@ -15,6 +15,7 @@ typedef struct cart_info
 
 void *arrive_manager(void *arg)
 {
+
   cart_info *CART = (cart_info *)arg;
 
   switch(CART->track){
@@ -26,8 +27,8 @@ void *arrive_manager(void *arg)
       break;
 
     case Red:
-      sem_wait(&junction[0]);
       sem_wait(&junction[1]);
+      sem_wait(&junction[0]);
       reserve(CART->cart, A);
       reserve(CART->cart, B);
       break;
@@ -47,8 +48,8 @@ void *arrive_manager(void *arg)
       break;
 
     case Yellow:
-      sem_wait(&junction[3]);
       sem_wait(&junction[4]);
+      sem_wait(&junction[3]);
       reserve(CART->cart, D);
       reserve(CART->cart, E);
       break;
