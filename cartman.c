@@ -52,7 +52,7 @@ void arrive(unsigned int cart, enum track track, enum junction junction)
   
 
   pthread_create(&thread, NULL, arrive_manager, (void *) &CART);
-  printf("thread id: %d", thread);
+  printf("thread id: %lu", thread);
   pthread_join(thread, NULL);
 
 }
