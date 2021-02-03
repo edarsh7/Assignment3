@@ -22,7 +22,7 @@ void *arrive_manager(void *arg)
   enum junction j1 = CART->track;
   enum junction j2 = CART->track + 1;
 
-  
+  sem_wait(&deadlock);
   sem_wait(&junction[(int)CART->track]);
   if(CART->track == Black)
   {
@@ -62,42 +62,20 @@ void arrive(unsigned int cart, enum track track, enum junction junction)
  */
 void depart(unsigned int cart, enum track track, enum junction junct) 
 {
-    switch(track){
-    case Black:
-      release(cart, A);
-      release(cart, E);
-      sem_post(&junction[4]);
-      sem_post(&junction[0]);
-      break;
-
-    case Red:
-      release(cart, A);
-      release(cart, B);
-      sem_post(&junction[0]);
-      sem_post(&junction[1]);
-      break;
-
-    case Green:
-      release(cart, B);
-      release(cart, C);
-      sem_post(&junction[1]);
-      sem_post(&junction[2]);
-      break;
-
-    case Blue:
-      release(cart, C);
-      release(cart, D);
-      sem_post(&junction[2]);
-      sem_post(&junction[3]);
-      break;
-
-    case Yellow:
-      release(cart, D);
-      release(cart, E);
-      sem_post(&junction[3]);
-      sem_post(&junction[4]);
-      break;
+  if(track == Black)
+  {
+    release(cart, A);
+    release(cart, E);
+    sem_post(&junction[4]);
+    sem_post(&junction[0]);
+  }else
+  {
+    release(cart, junct);
+    release(cart, junct + 1);
+    sem_post(&junction[(int)track]);
+    sem_post(&junction[(int)track + 1]);
   }
+  
 }
 
 
