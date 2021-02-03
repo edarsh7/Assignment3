@@ -5,6 +5,8 @@
 #include <stdio.h>
 
 sem_t junction[5];
+pthread_t thread[5];
+int thread_turn=0;
 
 typedef struct cart_info
 {
@@ -12,9 +14,6 @@ typedef struct cart_info
   enum track track;
   unsigned int cart;
 }cart_info;
-
-cart_info CART;
-
 
 
 void *arrive_manager(void *arg)
@@ -48,16 +47,15 @@ void *arrive_manager(void *arg)
  */
 void arrive(unsigned int cart, enum track track, enum junction junction) 
 {
+  cart_info CART;
   CART.cart = cart;
   CART.track = track;
   CART.junction = junction;
 
-  pthread_t thread;
+  pthread_create(&thread[thread_turn], NULL, arrive_manager, (void *) &CART);
 
-  pthread_create(&thread, NULL, arrive_manager, (void *) &CART);
-
-  pthread_join(thread, NULL);
-
+  pthread_join(thread[thread_turn], NULL);
+  turn++;
 }
 
 
