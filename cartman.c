@@ -19,7 +19,7 @@ void *arrive_manager(void *arg)
 {
 
   cart_info *CART = (cart_info *)arg;
-  
+
   sem_wait(&junction[(int)CART->track]);
   if(CART->track == Black)
   {
@@ -59,8 +59,7 @@ void arrive(unsigned int cart, enum track track, enum junction junction)
  */
 void depart(unsigned int cart, enum track track, enum junction junct) 
 {
-  enum junction j1 = track;
-  enum junction j2 = track + 1;
+  
   if(track == Black)
   {
     release(cart, A);
@@ -70,8 +69,8 @@ void depart(unsigned int cart, enum track track, enum junction junct)
   }
   else
   {
-    release(cart, j1);
-    release(cart, j2);
+    release(cart, track);
+    release(cart, track+1);
     sem_post(&junction[(int)track]);
     sem_post(&junction[(int)(track + 1)]);
   }
