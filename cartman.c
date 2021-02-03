@@ -33,8 +33,8 @@ void *arrive_manager(void *arg)
       break;
 
     case Green:
-      sem_wait(&junction[1]);
       sem_wait(&junction[2]);
+      sem_wait(&junction[1]);
       reserve(CART->cart, B);
       reserve(CART->cart, C);
       break;
@@ -54,7 +54,7 @@ void *arrive_manager(void *arg)
       break;
   }
   cross(CART->cart, CART->track, CART->junction);
-
+  return NULL;
 }
 
 /*
