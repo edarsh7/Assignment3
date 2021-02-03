@@ -70,20 +70,20 @@ void arrive(unsigned int cart, enum track track, enum junction junction)
   pthread_t thread;
   
   pthread_create(&thread, NULL, arrive_manager, (void *) &CART);
-  pthread_join(&thread, NULL);
+  pthread_join(thread, NULL);
 }
 
 /*
  * You need to implement this function, see cartman.h for details 
  */
-void depart(unsigned int cart, enum track track, enum junction junction) 
+void depart(unsigned int cart, enum track track, enum junction junct) 
 {
-    switch(CART->track){
+    switch(track){
     case Black:
       release(cart, A);
       release(cart, E);
-      sem_post(&junction[0]);
       sem_post(&junction[4]);
+      sem_post(&junction[0]);
       break;
 
     case Red:
