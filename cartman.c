@@ -23,14 +23,14 @@ void *arrive_manager(void *arg)
   if(CART->track == Black)
   {
     sem_wait(&junction[4]);
-    reserve(CART->cart, E);
     sem_wait(&junction[0]);
+    reserve(CART->cart, E);
     reserve(CART->cart, A);
   }else
   {
     sem_wait(&junction[(int)CART->track]);
-    reserve(CART->cart, CART->track);
     sem_wait(&junction[(int)CART->track + 1]);
+    reserve(CART->cart, CART->track);
     reserve(CART->cart, CART->track + 1);
   }
   
@@ -52,7 +52,7 @@ void arrive(unsigned int cart, enum track track, enum junction junction)
   
 
   pthread_create(&thread, NULL, arrive_manager, (void *) &CART);
-  printf("thread id: %lu", thread);
+
   pthread_join(thread, NULL);
 
 }
