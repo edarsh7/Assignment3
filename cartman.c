@@ -52,6 +52,7 @@ void arrive(unsigned int cart, enum track track, enum junction junction)
   
 
   pthread_create(&thread, NULL, arrive_manager, (void *) &CART);
+  printf("thread id: %d", thread);
   pthread_join(thread, NULL);
 
 }
@@ -89,5 +90,5 @@ void cartman()
   {
     sem_init(&junction[i], 0, 1);
   }
-  sem_init(&deadlock, 0, 2);
+
 }
