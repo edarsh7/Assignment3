@@ -6,12 +6,18 @@
 
 sem_t junction[5];
 
+typedef struct cart_info
+{
+  enum junction junction;
+  enum track track;
+  unsigned int cart;
+}cart_info;
 
 void *arrive_manager(void *arg)
 {
-  int junct = *(int *)arg;
-  sem_wait(&junction[junct]);
-  sem_wait(&junction[junct+1]);
+  cart_info CART = *(cart_info *)arg;
+
+
 }
 
 /*
@@ -19,9 +25,14 @@ void *arrive_manager(void *arg)
  */
 void arrive(unsigned int cart, enum track track, enum junction junction) 
 {
+  cart_info CART;
+  CART.cart = cart;
+  CART.track = track;
+  CART.junction = junction;
+
   pthread_t thread;
-  int junct = (int) junction;
-  pthread_create(&thread, NULL, arrive_manager, (void)* junct);
+  
+  pthread_create(&thread, NULL, arrive_manager, (void)* CART);
   pthread_join(&thread, NULL);
 }
 
@@ -30,6 +41,7 @@ void arrive(unsigned int cart, enum track track, enum junction junction)
  */
 void depart(unsigned int cart, enum track track, enum junction junction) 
 {
+
 }
 
 
