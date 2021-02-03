@@ -13,6 +13,7 @@ typedef struct cart_info
   unsigned int cart;
 }cart_info;
 
+cart_info CART;
 
 
 
@@ -47,7 +48,6 @@ void *arrive_manager(void *arg)
  */
 void arrive(unsigned int cart, enum track track, enum junction junction) 
 {
-  cart_info CART;
   CART.cart = cart;
   CART.track = track;
   CART.junction = junction;
