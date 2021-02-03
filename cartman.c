@@ -37,25 +37,25 @@ void *arrive_manager(void *arg)
       break;
 
     case Green:
-      sem_wait(&deadlock);
       sem_wait(&junction[2]);
+      sem_wait(&deadlock);
       sem_wait(&junction[1]);
       reserve(CART->cart, B);
       reserve(CART->cart, C);
       break;
 
     case Blue:
-      sem_wait(&deadlock);
       sem_wait(&junction[2]);
+      sem_wait(&deadlock);
       sem_wait(&junction[3]);
       reserve(CART->cart, C);
       reserve(CART->cart, D);
       break;
 
     case Yellow:
+      sem_wait(&junction[3]);
       sem_wait(&deadlock);
       sem_wait(&junction[4]);
-      sem_wait(&junction[3]);
       reserve(CART->cart, D);
       reserve(CART->cart, E);
       break;
@@ -99,7 +99,6 @@ void depart(unsigned int cart, enum track track, enum junction junct)
       release(cart, B);
       sem_post(&junction[0]);
       sem_post(&junction[1]);
-      sem_post(&deadlock);
       break;
 
     case Green:
