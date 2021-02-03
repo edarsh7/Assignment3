@@ -7,6 +7,7 @@
 sem_t junction[5];
 sem_t deadlock;
 
+
 typedef struct cart_info
 {
   enum junction junction;
@@ -14,30 +15,34 @@ typedef struct cart_info
   unsigned int cart;
 }cart_info;
 
+
+
+
 void *arrive_manager(void *arg)
 {
-
   cart_info *CART = (cart_info *)arg;
-
-  
+ 
   if(CART->track == Black)
   {
     sem_wait(&junction[4]);
-    reserve(CART->cart, E);
-    
     sem_wait(&junction[0]);
+    reserve(CART->cart, E);
     reserve(CART->cart, A);
   }else
   {
-    sem_wait(&junction[(int)CART->track]);
+    sem_wait(&junction[CART->track]);
+    sem_wait(&junction[CART->track + 1]);
     reserve(CART->cart, CART->track);
-    sem_wait(&junction[(int)CART->track + 1]);
     reserve(CART->cart, CART->track + 1);
   }
   
   cross(CART->cart, CART->track, CART->junction);
   return NULL;
 }
+
+
+
+
 
 /*
  * You need to implement this function, see cartman.h for details 
@@ -51,12 +56,16 @@ void arrive(unsigned int cart, enum track track, enum junction junction)
 
   pthread_t thread;
   
-
+  sem_wait(&deadlock);
   pthread_create(&thread, NULL, arrive_manager, (void *) &CART);
 
   pthread_join(thread, NULL);
 
 }
+
+
+
+
 
 /*
  * You need to implement this function, see cartman.h for details 
@@ -78,7 +87,11 @@ void depart(unsigned int cart, enum track track, enum junction junct)
     sem_post(&junction[track]);
     sem_post(&junction[track + 1]);
   }
+  sem_post(&deadlock);
 }
+
+
+
 
 
 /*
@@ -91,5 +104,6 @@ void cartman()
   {
     sem_init(&junction[i], 0, 1);
   }
+  sem_init(&deadlock, 0, 2);
 
 }
