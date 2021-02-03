@@ -62,6 +62,8 @@ void arrive(unsigned int cart, enum track track, enum junction junction)
  */
 void depart(unsigned int cart, enum track track, enum junction junct) 
 {
+  enum junction j1 = track;
+  enum junction j2 = track + 1;
   if(track == Black)
   {
     release(cart, A);
@@ -71,10 +73,11 @@ void depart(unsigned int cart, enum track track, enum junction junct)
   }
   else
   {
+
     release(cart, track);
     release(cart, track + 1);
-    sem_post(&junction[(int)track]);
-    sem_post(&junction[(int)(track + 1)]);
+    sem_post(&junction[j1]);
+    sem_post(&junction[j2]);
   }
   
 }
