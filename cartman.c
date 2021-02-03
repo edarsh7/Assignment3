@@ -73,17 +73,17 @@ void depart(unsigned int cart, enum track track, enum junction junct)
   
   if(track == Black)
   {
-    release(cart, A);
     release(cart, E);
-    sem_post(&junction[0]);
+    release(cart, A);
     sem_post(&junction[4]);
+    sem_post(&junction[0]);
   }
   else
   {
-    release(cart, track);
     release(cart, track+1);
-    sem_post(&junction[track]);
+    release(cart, track);
     sem_post(&junction[track + 1]);
+    sem_post(&junction[track]);
   }
 
 }
