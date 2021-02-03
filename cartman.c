@@ -26,7 +26,7 @@ void *arrive_manager(void *arg)
   sem_wait(&junction[(int)CART->track]);
   sem_wait(&junction[(int)CART->track + 1]);
   reserve(CART->cart, j1);
-  reserve(CART->cart, j2)
+  reserve(CART->cart, j2);
 
   
   
