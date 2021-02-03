@@ -82,36 +82,36 @@ void depart(unsigned int cart, enum track track, enum junction junction)
     case Black:
       release(cart, A);
       release(cart, E);
-      sem_open(&junction[0]);
-      sem_open(&junction[4]);
+      sem_post(&junction[0]);
+      sem_post(&junction[4]);
       break;
 
     case Red:
       release(cart, A);
       release(cart, B);
-      sem_open(&junction[0]);
-      sem_open(&junction[1]);
+      sem_post(&junction[0]);
+      sem_post(&junction[1]);
       break;
 
     case Green:
       release(cart, B);
       release(cart, C);
-      sem_open(&junction[1]);
-      sem_open(&junction[2]);
+      sem_post(&junction[1]);
+      sem_post(&junction[2]);
       break;
 
     case Blue:
       release(cart, C);
       release(cart, D);
-      sem_open(&junction[2]);
-      sem_open(&junction[3]);
+      sem_post(&junction[2]);
+      sem_post(&junction[3]);
       break;
 
     case Yellow:
       release(cart, D);
       release(cart, E);
-      sem_open(&junction[3]);
-      sem_open(&junction[4]);
+      sem_post(&junction[3]);
+      sem_post(&junction[4]);
       break;
   }
 }
