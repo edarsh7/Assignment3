@@ -30,33 +30,36 @@ void *arrive_manager(void *arg)
 
     case Red:
       sem_wait(&junction[1]);
+      reserve(CART->cart, B);
       sem_wait(&deadlock);
       sem_wait(&junction[0]);
       reserve(CART->cart, A);
-      reserve(CART->cart, B);
+  
       break;
 
     case Green:
       sem_wait(&junction[2]);
+      reserve(CART->cart, C);
       sem_wait(&deadlock);
       sem_wait(&junction[1]);
       reserve(CART->cart, B);
-      reserve(CART->cart, C);
+    
       break;
 
     case Blue:
       sem_wait(&junction[2]);
+      reserve(CART->cart, D);
       sem_wait(&deadlock);
       sem_wait(&junction[3]);
       reserve(CART->cart, C);
-      reserve(CART->cart, D);
+      
       break;
 
     case Yellow:
       sem_wait(&junction[3]);
+      reserve(CART->cart, D);
       sem_wait(&deadlock);
       sem_wait(&junction[4]);
-      reserve(CART->cart, D);
       reserve(CART->cart, E);
       break;
   }
