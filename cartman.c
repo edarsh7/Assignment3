@@ -19,13 +19,7 @@ void *arrive_manager(void *arg)
 {
 
   cart_info *CART = (cart_info *)arg;
-  enum junction j1 = CART->track;
-  enum junction j2 = CART->track + 1;
-
-  if(turn == 0)
-  {
-    sem_wait(&deadlock);
-  }
+  
   sem_wait(&junction[(int)CART->track]);
   if(CART->track == Black)
   {
@@ -34,9 +28,9 @@ void *arrive_manager(void *arg)
   }else
   {
     sem_wait(&junction[(int)CART->track + 1]);
-    reserve(CART->cart, j2);
+    reserve(CART->cart, CART->track + 1);
   }
-  reserve(CART->cart, j1);
+  reserve(CART->cart, CART->track);
 
   
   
@@ -81,11 +75,7 @@ void depart(unsigned int cart, enum track track, enum junction junct)
     sem_post(&junction[(int)track]);
     sem_post(&junction[(int)(track + 1)]);
   }
-  if(turn == 0)
-  {
-    turn++;
-    sem_post(&deadlock);
-  }
+  
 }
 
 
