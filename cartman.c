@@ -7,7 +7,7 @@
 
 sem_t junction[5];
 sem_t deadlock;
-
+pthread_t thread;
   
 
 typedef struct cart_info
@@ -19,24 +19,8 @@ typedef struct cart_info
 
 void *arrive_manager(void *arg)
 {
-
   cart_info *CART = (cart_info *)arg;
 
-  /*
-  if(CART->track == Black)
-  {
-    sem_wait(&junction[4]);
-    reserve(CART->cart, E);
-    sem_wait(&junction[0]);
-    reserve(CART->cart, A);
-  }else
-  {
-    sem_wait(&junction[(int)CART->track]);
-    reserve(CART->cart, CART->track);
-    sem_wait(&junction[(int)CART->track + 1]);
-    reserve(CART->cart, CART->track + 1);
-  }
-  */
   sem_wait(&junction[(CART->track) % 5]);
   reserve(CART->cart, (CART->track) % 5);
   sem_wait(&junction[(CART->track + 1) % 5]);
@@ -51,7 +35,6 @@ void *arrive_manager(void *arg)
  */
 void arrive(unsigned int cart, enum track track, enum junction junction) 
 {
-  pthread_t thread;
   cart_info CART;
   CART.cart = cart;
   CART.track = track;
@@ -70,22 +53,6 @@ void depart(unsigned int cart, enum track track, enum junction junct)
   sem_post(&junction[(track+1) % 5]);
   release(cart, (track) % 5);
   sem_post(&junction[(track) % 5]);
-  /*
-  if(track == Black)
-  {
-    release(cart, A);
-    release(cart, E);
-    sem_post(&junction[0]);
-    sem_post(&junction[4]);
-  }
-  else
-  {
-    release(cart, track);
-    release(cart, track+1);
-    sem_post(&junction[(int)track]);
-    sem_post(&junction[(int)(track + 1)]);
-  }
-  */
 
 }
 
