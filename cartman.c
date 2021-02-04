@@ -42,7 +42,7 @@ void arrive(unsigned int cart, enum track track, enum junction junction)
   CART->track = track;
   CART->junction = junction;
 
-  pthread_create(&thread, NULL, arrive_manager, CART);
+  pthread_create(&thread, NULL, arrive_manager, (void*)CART);
 }
 
 /*
