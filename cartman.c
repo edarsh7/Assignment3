@@ -7,7 +7,7 @@
 
 sem_t junction[5];
 sem_t deadlock;
-pthread_t thread;
+
   
 
 typedef struct cart_info
@@ -37,6 +37,7 @@ void *arrive_manager(void *arg)
  */
 void arrive(unsigned int cart, enum track track, enum junction junction) 
 {
+  pthread_t thread;
   cart_info *CART = malloc(sizeof(cart_info));
   CART->cart = cart;
   CART->track = track;
