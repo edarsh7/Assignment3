@@ -22,6 +22,7 @@ void *arrive_manager(void *arg)
   cart_info *CART = (cart_info *)arg;
 
   sem_wait(&deadlock);
+
   sem_wait(&junction[(CART->track) % 5]);
   reserve(CART->cart, (CART->track) % 5);
   sem_wait(&junction[(CART->track + 1) % 5]);
@@ -36,12 +37,12 @@ void *arrive_manager(void *arg)
  */
 void arrive(unsigned int cart, enum track track, enum junction junction) 
 {
-  cart_info CART;
-  CART.cart = cart;
-  CART.track = track;
-  CART.junction = junction;
+  cart_info CART = malloc(sizeof(cart_info));
+  CART->cart = cart;
+  CART->track = track;
+  CART->junction = junction;
 
-  pthread_create(&thread, NULL, arrive_manager, (void *) &CART);
+  pthread_create(&thread, NULL, arrive_manager, CART);
 }
 
 /*
@@ -53,6 +54,7 @@ void depart(unsigned int cart, enum track track, enum junction junct)
   sem_post(&junction[(track+1) % 5]);
   release(cart, (track) % 5);
   sem_post(&junction[(track) % 5]);
+
   sem_post(&deadlock);
 
 }
