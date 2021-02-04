@@ -8,7 +8,7 @@
 sem_t junction[5];
 sem_t deadlock;
 
-  
+    pthread_t thread[5];
 
 typedef struct cart_info
 {
@@ -46,13 +46,12 @@ void *arrive_manager(void *arg)
  */
 void arrive(unsigned int cart, enum track track, enum junction junction) 
 {
-  pthread_t thread;
   cart_info CART;
   CART.cart = cart;
   CART.track = track;
   CART.junction = junction;
 
-  pthread_create(&thread, NULL, arrive_manager, (void *) &CART);
+  pthread_create(&thread[cart], NULL, arrive_manager, (void *) &CART);
 }
 
 /*
