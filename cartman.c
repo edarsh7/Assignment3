@@ -5,8 +5,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define MAX MAX
 //global semaphores that keep track of the junctions and deadlock
-sem_t junction[5];
+sem_t junction[MAX];
 sem_t deadlock;
 
 //struct that keeps all of the cart info so our thread can access the information
@@ -17,6 +18,13 @@ typedef struct cart_info
   unsigned int cart;
 }cart_info;
 
+void init_cart(unsigned int cart, enum track track, enum junction junction, struct cart_info * CART)
+{
+  CART->cart = cart;
+  CART->track = track;
+  CART->junction = junction;
+}
+
 
 //this thread function will allow 2 threads in, then wait and reserve each junction necessary
 //for the given track
@@ -26,10 +34,10 @@ void *arrive_manager(void *arg)
 
   sem_wait(&deadlock);
 
-  sem_wait(&junction[(CART->track) % 5]);
-  reserve(CART->cart, (CART->track) % 5);
-  sem_wait(&junction[(CART->track + 1) % 5]);
-  reserve(CART->cart, (CART->track + 1) % 5);
+  sem_wait(&junction[(CART->track) % MAX]);
+  reserve(CART->cart, (CART->track) % MAX);
+  sem_wait(&junction[(CART->track + 1) % MAX]);
+  reserve(CART->cart, (CART->track + 1) % MAX);
 
   cross(CART->cart, CART->track, CART->junction);
   return NULL;
@@ -45,9 +53,7 @@ void arrive(unsigned int cart, enum track track, enum junction junction)
 {
   pthread_t thread;
   cart_info *CART = malloc(sizeof(cart_info));
-  CART->cart = cart;
-  CART->track = track;
-  CART->junction = junction;
+  init_cart(cart, track, junction);
 
   pthread_create(&thread, NULL, arrive_manager, CART);
 }
@@ -58,10 +64,10 @@ void arrive(unsigned int cart, enum track track, enum junction junction)
  */
 void depart(unsigned int cart, enum track track, enum junction junct) 
 {
-  release(cart, (track+1) % 5);
-  sem_post(&junction[(track+1) % 5]);
-  release(cart, (track) % 5);
-  sem_post(&junction[(track) % 5]);
+  release(cart, (track+1) % MAX);
+  sem_post(&junction[(track+1) % MAX]);
+  release(cart, (track) % MAX);
+  sem_post(&junction[(track) % MAX]);
 
   sem_post(&deadlock);
 
@@ -75,7 +81,7 @@ void cartman()
 {
   sem_init(&deadlock, 0, 2);
 
-  for(int i=0; i < 5; i++)
+  for(int i=0; i < MAX; i++)
   {
     sem_init(&junction[i], 0, 1);
   }
