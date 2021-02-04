@@ -57,7 +57,7 @@ void depart(unsigned int cart, enum track track, enum junction junct)
   release(cart, (track + 1) % 5);
   sem_post(&junction[(track + 1) % 5]);
   release(cart, (track) % 5);
-  sem_post(&junction[(track) % 5])
+  sem_post(&junction[(track) % 5]);
 }
 
 
