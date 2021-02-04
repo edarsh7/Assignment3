@@ -21,6 +21,7 @@ void *arrive_manager(void *arg)
 {
   cart_info *CART = (cart_info *)arg;
 
+  sem_wait(&deadlock);
   sem_wait(&junction[(CART->track) % 5]);
   reserve(CART->cart, (CART->track) % 5);
   sem_wait(&junction[(CART->track + 1) % 5]);
@@ -53,6 +54,7 @@ void depart(unsigned int cart, enum track track, enum junction junct)
   sem_post(&junction[(track+1) % 5]);
   release(cart, (track) % 5);
   sem_post(&junction[(track) % 5]);
+  sem_post(&deadlock);
 
 }
 
@@ -62,6 +64,7 @@ void depart(unsigned int cart, enum track track, enum junction junct)
  */
 void cartman() 
 {
+  sem_init(&deadlock, 0, 2);
   for(int i=0; i < 5; i++)
   {
     sem_init(&junction[i], 0, 1);
