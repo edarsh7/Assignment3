@@ -3,6 +3,7 @@
 #include <pthread.h>
 #include <semaphore.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 sem_t junction[5];
 sem_t deadlock;
