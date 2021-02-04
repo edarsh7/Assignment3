@@ -7,7 +7,6 @@
 
 sem_t junction[5];
 sem_t deadlock;
-pthread_t thread;
 
   
 
@@ -47,13 +46,14 @@ void *arrive_manager(void *arg)
  */
 void arrive(unsigned int cart, enum track track, enum junction junction) 
 {
+  pthread_t thread;
   cart_info CART;
   CART.cart = cart;
   CART.track = track;
   CART.junction = junction;
 
-  sem_wait(&deadlock);
   pthread_create(&thread, NULL, arrive_manager, (void *) &CART);
+  pthread_join(thread, NULL);
 }
 
 /*
@@ -85,7 +85,6 @@ void depart(unsigned int cart, enum track track, enum junction junct)
  */
 void cartman() 
 {
-  sem_init(&deadlock, 0, 2);
   for(int i=0; i < 5; i++)
   {
     sem_init(&junction[i], 0, 1);
