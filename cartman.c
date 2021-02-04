@@ -46,12 +46,12 @@ void *arrive_manager(void *arg)
  */
 void arrive(unsigned int cart, enum track track, enum junction junction) 
 {
-  cart_info CART;
-  CART.cart = cart;
-  CART.track = track;
-  CART.junction = junction;
+  cart_info *CART = malloc(sizeof(cart_info));
+  CART->cart = cart;
+  CART->track = track;
+  CART->junction = junction;
 
-  pthread_create(&thread[cart], NULL, arrive_manager, (void *) &CART);
+  pthread_create(&thread[cart], NULL, arrive_manager, CART);
 }
 
 /*
