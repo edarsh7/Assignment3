@@ -65,7 +65,7 @@ void depart(unsigned int cart, enum track track, enum junction junct)
  */
 void cartman() 
 {
-  sem_init(&deadlock, 0, 4);
+  sem_init(&deadlock, 0, 2);
 
   for(int i=0; i < 5; i++)
   {
