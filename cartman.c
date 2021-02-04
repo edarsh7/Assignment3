@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX MAX
+#define MAX 5
 //global semaphores that keep track of the junctions and deadlock
 sem_t junction[MAX];
 sem_t deadlock;
@@ -53,7 +53,7 @@ void arrive(unsigned int cart, enum track track, enum junction junction)
 {
   pthread_t thread;
   cart_info *CART = malloc(sizeof(cart_info));
-  init_cart(cart, track, junction);
+  init_cart(cart, track, junction, CART);
 
   pthread_create(&thread, NULL, arrive_manager, CART);
 }
