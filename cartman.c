@@ -20,21 +20,10 @@ void *arrive_manager(void *arg)
 {
   cart_info *CART = (cart_info *)arg;
  
-  if(CART->track == Black)
-  {
-    sem_wait(&junction[4]);
-    reserve(CART->cart, E);
-    sem_wait(&junction[0]);
-    
-    reserve(CART->cart, A);
-  }else
-  {
-    sem_wait(&junction[CART->track]);
-    reserve(CART->cart, CART->track);
-    sem_wait(&junction[CART->track + 1]);
-    
-    reserve(CART->cart, CART->track + 1);
-  }
+  sem_post(&junction[(CART->track) % 5]);
+  reserve(CART->cart, (CART->track) % 5);
+  sem_post(&junction[(CART->track + 1) % 5]);
+  reserve(CART->cart, (CART->track + 1) % 5);
   
   cross(CART->cart, CART->track, CART->junction);
   return NULL;
@@ -60,30 +49,15 @@ void arrive(unsigned int cart, enum track track, enum junction junction)
 }
 
 
-
-
-
 /*
  * You need to implement this function, see cartman.h for details 
  */
 void depart(unsigned int cart, enum track track, enum junction junct) 
 {
-  
-  if(track == Black)
-  {
-    release(cart, A);
-    release(cart, E);
-    sem_post(&junction[0]);
-    sem_post(&junction[4]);
-  }
-  else
-  {
-    release(cart, track);
-    release(cart, track+1);
-    sem_post(&junction[track]);
-    sem_post(&junction[track + 1]);
-  }
-
+  release(cart, (track + 1) % 5);
+  sem_post(&junction[(track + 1) % 5]);
+  release(cart, (track) % 5);
+  sem_post(&junction[(track) % 5])
 }
 
 
