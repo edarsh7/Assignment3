@@ -1,0 +1,4 @@
+fileman.c: In function ‘fileman_copy’:
+fileman.c:38:7: warning: unused variable ‘foo’ [-Wunused-variable]
+   int foo = 1024;
+       ^
